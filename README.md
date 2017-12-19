@@ -72,16 +72,15 @@ python newsdata.py
 ```
 What are the most popular three articles of all time?
 
-1. Candidate is jerk, alleges rival
-2. Bears love berries, alleges bear
-3. Bad things gone, say good people
+1. Candidate is jerk, alleges rival -- 338647 views
+2. Bears love berries, alleges bear -- 253801 views
+3. Bad things gone, say good people -- 170098 views
 
 Who are the most popular article authors of all time?
 
-1. Ursula La Multa
-2. Rudolf von Treppenwitz
-3. Anonymous Contributor
-4. Markoff Chaney
+1. Ursula La Multa (507594 views)
+2. Rudolf von Treppenwitz (423457 views)
+3. Anonymous Contributor (170098 views)
 
 On which days did more than 1% of requests lead to errors?
 
@@ -98,7 +97,7 @@ On which days did more than 1% of requests lead to errors?
 Each question has its own function with three required pieces:
 
 1. a human-readable printable question to start the output
-1. the SQL query
+1. a single SQL query to satisfy the question
 1. code to beautify the printed output
 
 The main() connect to the database, runs the questions, and closes the database connection. Add a question by creating a new question function and calling it. Comment out questions in the main to skip running those questions.

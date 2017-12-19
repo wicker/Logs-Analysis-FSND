@@ -13,16 +13,16 @@ def question1(cur):
 
     print "What are the most popular three articles of all time?\n"
 
-    query = "SELECT DISTINCT title, count(path)"
-    query += " FROM articles, log"
-    query += " WHERE path LIKE '%' || slug || '%' GROUP BY title "
-    query += "ORDER BY count(path) desc LIMIT 3;"
+    query = "SELECT title, count(slug)"
+    query += " FROM log, articles"
+    query += " WHERE path LIKE '%' || slug GROUP BY title "
+    query += "ORDER BY count desc LIMIT 3;"
 
     cur.execute(query)
 
     i = 1
     for a in cur.fetchall():
-        print str(i) + '. ' + a[0]
+        print str(i) + '. ' + a[0] + ' -- ' + str(a[1]) + ' views'
         i = i + 1
 
     print ''
@@ -33,18 +33,23 @@ def question2(cur):
 
     print "Who are the most popular article authors of all time?\n"
 
-    query = "SELECT DISTINCT authors.name, count(path)"
-    query += " FROM articles, authors, log"
-    query += " WHERE articles.author = authors.id"
-    query += " AND path LIKE '%' || slug || '%'"
-    query += " GROUP BY authors.name"
-    query += " ORDER BY count(path) DESC;"
+    query = "SELECT artview.name, sum(artview.count)"
+    query += " FROM ("
+    query += "       SELECT title, author, name, count(slug)"
+    query += "       FROM log, articles, authors"
+    query += "       WHERE path LIKE '%'||slug"
+    query += "          AND authors.id = articles.author"
+    query += "       GROUP BY title, name, author"
+    query += "       ORDER BY count DESC) as artview"
+    query += " GROUP BY artview.name"
+    query += " ORDER BY sum DESC"
+    query += " LIMIT 3;"
 
     cur.execute(query)
 
     i = 1
     for a in cur.fetchall():
-        print str(i) + '. ' + a[0]
+        print str(i) + '. ' + a[0] + ' (' + str(a[1]) + ' views)'
         i = i + 1
 
     print ''
@@ -82,9 +87,9 @@ if __name__ == "__main__":
     conn = psycopg2.connect(dbname='news', user='vagrant')
     cur = conn.cursor()
 
-    question1(cur)
+    #question1(cur)
     question2(cur)
-    question3(cur)
+    #question3(cur)
 
     cur.close()
     conn.close()
