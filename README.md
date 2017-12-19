@@ -1,5 +1,4 @@
 # Logs-Analysis-FSND
-Logs Analysis project of the Udacity Full Stack Nanodegree
 
 This is an internal reporting tool to get information out of a newspaper site's PostgreSQL database. 
 
@@ -15,16 +14,14 @@ The Python file newsdata.py performs three queries:
 - Who are the most popular article authors of all time?
 - On which days did more than 1% of requests lead to errors?
 
-# System Requirements
+# Setup and Run 
+
+1. Install the requirements: 
 
 - Python2
 - PostgreSQL
 - Virtualbox
 - Vagrant
-
-# Setup
-
-1. Install the requirements above.
 
 2. Clone this repository and change into the directory.
 
@@ -58,7 +55,7 @@ wget https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/
 unzip newsdata.zip
 ```
 
-7. Connect to andd set up the database server.
+7. Connect to and set up the database server.
 
 ```
 psql -d news -f newsdata.sql
@@ -98,4 +95,10 @@ On which days did more than 1% of requests lead to errors?
 
 # Program Structure
 
+Each question has its own function with three required pieces:
 
+1. a human-readable printable question to start the output
+1. the SQL query
+1. code to beautify the printed output
+
+The main() connect to the database, runs the questions, and closes the database connection. Add a question by creating a new question function and calling it. Comment out questions in the main to skip running those questions.
