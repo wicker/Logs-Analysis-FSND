@@ -5,9 +5,9 @@ This is an internal reporting tool to get information out of a newspaper site's 
 
 The database has three tables:
 
-- authors (
-- articles (
-- logs (
+- authors (name, bio, id)
+- articles (author, title, slug, lead, body, time, id)
+- log (path, ip, method, status, time, id)
 
 The logs.py performs three queries: 
 
