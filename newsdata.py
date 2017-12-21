@@ -1,11 +1,12 @@
 #!/usr/bin/env python2.7
 import psycopg2
 
-# QUESTION FUNCTIONS
-# Each question should have its own function containing:
-# - a human-readable printable question for the output
-# - the SQL query
-# - code to beautify the printed output
+""" How to write a question function:
+Each question should have its own function containing:
+  - a human-readable printable question for the output
+  - the SQL query
+  - code to beautify the printed output
+"""
 
 
 def question1(cur):
@@ -18,8 +19,9 @@ def question1(cur):
 
     query = "SELECT title, count(slug)"
     query += " FROM log, articles"
-    query += " WHERE path LIKE '%' || slug GROUP BY title "
-    query += "ORDER BY count desc LIMIT 3;"
+    query += " WHERE path LIKE '%' || slug"
+    query += " GROUP BY title"
+    query += " ORDER BY count DESC LIMIT 3;"
 
     # the query returns an array containing:
     #   1. article name
@@ -41,14 +43,14 @@ def question2(cur):
 
     print "Most popular article authors of all time:\n"
 
-    query = "SELECT artview.name, sum(artview.count)"
+    query = "SELECT artview.name, SUM(artview.count)"
     query += " FROM ("
-    query += "       SELECT title, author, name, count(slug)"
+    query += "       SELECT title, author, name, COUNT(slug)"
     query += "       FROM log, articles, authors"
     query += "       WHERE path LIKE '%'||slug"
     query += "          AND authors.id = articles.author"
     query += "       GROUP BY title, name, author"
-    query += "       ORDER BY count DESC) as artview"
+    query += "       ORDER BY count DESC) AS artview"
     query += " GROUP BY artview.name"
     query += " ORDER BY sum DESC"
     query += " LIMIT 3;"
@@ -81,7 +83,7 @@ def question3(cur):
     query += " 	               count(status) AS total "
     query += " FROM log "
     query += " GROUP BY date "
-    query += " ORDER BY date) as requests"
+    query += " ORDER BY date) AS requests"
 
     query += " INNER JOIN "
 
@@ -90,7 +92,7 @@ def question3(cur):
     query += " FROM log "
     query += " WHERE status LIKE '404%' "
     query += " GROUP BY date, status"
-    query += " ORDER BY date) as errors"
+    query += " ORDER BY date) AS errors"
 
     query += " ON requests.date = errors.date"
 
