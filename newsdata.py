@@ -9,7 +9,10 @@ import psycopg2
 
 
 def question1(cur):
-    # QUESTION 1. Who are the most popular article authors of all time?
+    """Defines explicit QUESTION ONE and constructs printed output.
+
+    QUESTION 1. Who are the most popular article authors of all time?
+    """
 
     print "The most popular three articles of all time:\n"
 
@@ -18,17 +21,23 @@ def question1(cur):
     query += " WHERE path LIKE '%' || slug GROUP BY title "
     query += "ORDER BY count desc LIMIT 3;"
 
+    # the query returns an array containing:
+    #   1. article name
+    #   2. number of total article views
     cur.execute(query)
 
     i = 1
     for a in cur.fetchall():
-        print '\t' + str(i) + '. ' + a[0] + ' -- ' + str(a[1]) + ' views'
+        print '  ' + str(i) + '. ' + a[0] + ' -- ' + str(a[1]) + ' views'
         i = i + 1
     print ''
 
 
 def question2(cur):
-    # QUESTION 2. Who are the most popular article authors of all time?
+    """Defines explicit QUESTION TWO and constructs printed output.
+
+    QUESTION 2. Who are the most popular article authors of all time?
+    """
 
     print "Most popular article authors of all time:\n"
 
@@ -44,17 +53,23 @@ def question2(cur):
     query += " ORDER BY sum DESC"
     query += " LIMIT 3;"
 
+    # the query returns an array containing:
+    #   1. author name
+    #   2. number of total author views
     cur.execute(query)
 
     i = 1
     for a in cur.fetchall():
-        print '\t' + str(i) + '. ' + a[0] + ' (' + str(a[1]) + ' views)'
+        print '  ' + str(i) + '. ' + a[0] + ' -- ' + str(a[1]) + ' views'
         i = i + 1
     print ''
 
 
 def question3(cur):
-    # QUESTION 3. On which days did more than 1% of requests lead to errors?
+    """Defines explicit QUESTION THREE and constructs printed output.
+
+    QUESTION 3. On which days did more than 1% of requests lead to errors?
+    """
 
     print "Days on which more than 1% of requests led to errors:\n"
 
@@ -82,15 +97,18 @@ def question3(cur):
     query += " WHERE ROUND(errors.total*100.0/requests.total,1) > 1.0"
     query += " ORDER BY requests.date;"
 
+    # the query returns an array containing:
+    #   1. formatted date
+    #   2. the error rate as a percentage
     cur.execute(query)
 
     for a in cur.fetchall():
-        print '\t' + str(a[0]) + ' (' + str(a[1]) + '%)'
+        print '  ' + str(a[0]) + ' (' + str(a[1]) + '%)'
     print ''
 
 
 if __name__ == "__main__":
-    # Connect to database, run selected questions, close database
+    """Connects to database and run the selected queries."""
 
     conn = psycopg2.connect(dbname='news', user='vagrant')
     cur = conn.cursor()

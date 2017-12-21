@@ -67,27 +67,6 @@ Run the logs analysis program from the command line.
 python newsdata.py
 ```
 
-# Sample Output (NOT CORRECT YET)
-
-```
-The most popular three articles of all time:
-
-	1. Candidate is jerk, alleges rival -- 338647 views
-	2. Bears love berries, alleges bear -- 253801 views
-	3. Bad things gone, say good people -- 170098 views
-
-Most popular article authors of all time:
-
-	1. Ursula La Multa (507594 views)
-	2. Rudolf von Treppenwitz (423457 views)
-	3. Anonymous Contributor (170098 views)
-
-Days on which more than 1% of requests led to errors:
-
-	2016-07-17 (2.3%)
-
-```
-
 # Program Structure
 
 Each question has its own function with three required pieces:
@@ -96,4 +75,28 @@ Each question has its own function with three required pieces:
 1. a single SQL query to satisfy the question
 1. code to beautify the printed output
 
-The main() connect to the database, runs the questions, and closes the database connection. Add a question by creating a new question function and calling it. Comment out questions in the main to skip running those questions.
+The main() connect to the database, runs the questions, and closes the database connection. 
+
+The program can be extended by creating a new question function and calling it in main(). To improve the runtime, question functions can be defined in the program but commented out or otherwise not called in main(). 
+
+# Sample Output
+
+```
+The most popular three articles of all time:
+
+  1. Candidate is jerk, alleges rival -- 338647 views
+  2. Bears love berries, alleges bear -- 253801 views
+  3. Bad things gone, say good people -- 170098 views
+
+Most popular article authors of all time:
+
+  1. Ursula La Multa -- 507594 views
+  2. Rudolf von Treppenwitz -- 423457 views
+  3. Anonymous Contributor -- 170098 views
+
+Days on which more than 1% of requests led to errors:
+
+  2016-07-17 (2.3%)
+```
+
+
