@@ -11,7 +11,7 @@ import psycopg2
 def question1(cur):
     # QUESTION 1. Who are the most popular article authors of all time?
 
-    print "What are the most popular three articles of all time?\n"
+    print "The most popular three articles of all time:\n"
 
     query = "SELECT title, count(slug)"
     query += " FROM log, articles"
@@ -22,16 +22,15 @@ def question1(cur):
 
     i = 1
     for a in cur.fetchall():
-        print str(i) + '. ' + a[0] + ' -- ' + str(a[1]) + ' views'
+        print '\t' + str(i) + '. ' + a[0] + ' -- ' + str(a[1]) + ' views'
         i = i + 1
-
     print ''
 
 
 def question2(cur):
     # QUESTION 2. Who are the most popular article authors of all time?
 
-    print "Who are the most popular article authors of all time?\n"
+    print "Most popular article authors of all time:\n"
 
     query = "SELECT artview.name, sum(artview.count)"
     query += " FROM ("
@@ -49,36 +48,45 @@ def question2(cur):
 
     i = 1
     for a in cur.fetchall():
-        print str(i) + '. ' + a[0] + ' (' + str(a[1]) + ' views)'
+        print '\t' + str(i) + '. ' + a[0] + ' (' + str(a[1]) + ' views)'
         i = i + 1
-
     print ''
 
 
 def question3(cur):
     # QUESTION 3. On which days did more than 1% of requests lead to errors?
 
-    print "On which days did more than 1% of requests lead to errors?\n"
+    print "Days on which more than 1% of requests led to errors:\n"
 
-    query = "SELECT total.date, total.status_total, error.status_error,"
-    query += " error.status_error * 100.0/total.status_total AS error_rate"
-    query += " FROM ("
-    query += "	(SELECT   time::date as date, count(*) AS status_total "
-    query += "	 FROM 	  log"
-    query += "	 GROUP BY date) total"
-    query += " JOIN"
-    query += "	 (SELECT   time::date as date, count(*) AS status_error"
-    query += "	  FROM 	   log"
-    query += "	  WHERE    status not like '%200%'"
-    query += "	  GROUP BY date) error"
-    query += " ON error.date = total.date);"
+    query = "SELECT requests.date,"
+    query += "       ROUND(errors.total*100.0/requests.total,1) AS error_rate"
+    query += " FROM"
+
+    query += " (SELECT DISTINCT time::date AS date,"
+    query += " 	               count(status) AS total "
+    query += " FROM log "
+    query += " GROUP BY date "
+    query += " ORDER BY date) as requests"
+
+    query += " INNER JOIN "
+
+    query += " (SELECT DISTINCT time::date AS date,"
+    query += " 	                count(status) AS total"
+    query += " FROM log "
+    query += " WHERE status LIKE '404%' "
+    query += " GROUP BY date, status"
+    query += " ORDER BY date) as errors"
+
+    query += " ON requests.date = errors.date"
+
+    query += " WHERE ROUND(errors.total*100.0/requests.total,1) > 1.0"
+    query += " ORDER BY requests.date;"
 
     cur.execute(query)
 
-    i = 1
     for a in cur.fetchall():
-        print str(i) + '. ' + str(a[0])
-        i = i + 1
+        print '\t' + str(a[0]) + ' (' + str(a[1]) + '%)'
+    print ''
 
 
 if __name__ == "__main__":
@@ -87,9 +95,9 @@ if __name__ == "__main__":
     conn = psycopg2.connect(dbname='news', user='vagrant')
     cur = conn.cursor()
 
-    #question1(cur)
+    question1(cur)
     question2(cur)
-    #question3(cur)
+    question3(cur)
 
     cur.close()
     conn.close()
